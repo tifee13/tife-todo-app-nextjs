@@ -31,7 +31,12 @@ const TodoForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ title, completed: status, priority });
+    if (!title.trim()) {
+      return;
+    }
+    // Convert status string to boolean
+    const completedBool = status === 'true';
+    onSubmit({ title: title.trim(), completed: completedBool, priority });
   };
 
   const bg = useColorModeValue("pink.50", "purple.900");

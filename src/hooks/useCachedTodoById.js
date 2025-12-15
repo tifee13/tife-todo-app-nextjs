@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -17,7 +17,7 @@ const useCachedTodoById = (id) => {
           setIsPending(false);
           return;
         }
-        
+
         let { data, error } = await supabase
           .from('todos')
           .select('*')
@@ -40,55 +40,66 @@ const useCachedTodoById = (id) => {
     fetchTodo();
   }, [id]);
 
-const addTodo = async ({ title, completed, priority }) => {
-  try {
-    const { data, error } = await supabase
-      .from('todos')
-      .insert([{ title, completed, priority }])
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-    
-    router.push(`/todos/${data.id}`);
-
-  } catch (err) {
-    console.error("Failed to add todo:", err);
-    setError(err.message);
-  }
-};
-
-  const updateTodo = async (updatedFields) => {
+  const addTodo = useCallback(async ({ title, completed, priority }) => {
     try {
+      // Convert completed to boolean if it's a string
+      const completedBool = typeof completed === 'string'
+        ? completed.toLowerCase() === 'true'
+        : Boolean(completed);
+
       const { data, error } = await supabase
         .from('todos')
-        .update(updatedFields)
+        .insert([{ title, completed: completedBool, priority }])
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      router.push(`/todos/${data.id}`);
+
+    } catch (err) {
+      console.error("Failed to add todo:", err);
+      setError(err.message);
+    }
+  }, [router]);
+
+  const updateTodo = useCallback(async (updatedFields) => {
+    try {
+      // Convert completed to boolean if it's a string
+      const fieldsToUpdate = { ...updatedFields };
+      if (typeof fieldsToUpdate.completed === 'string') {
+        fieldsToUpdate.completed = fieldsToUpdate.completed.toLowerCase() === 'true';
+      }
+
+      const { data, error } = await supabase
+        .from('todos')
+        .update(fieldsToUpdate)
         .eq('id', id)
         .select()
         .single();
-        
+
       if (error) {
         throw new Error(error.message);
       }
 
       setTodo(data);
       router.push(`/todos/${id}`);
-      
+
     } catch (err) {
       console.error("Failed to update todo:", err);
       setError(err.message);
     }
-  };
+  }, [id, router]);
 
-  const deleteTodo = async () => {
+  const deleteTodo = useCallback(async () => {
     try {
       const { error } = await supabase
         .from('todos')
         .delete()
         .eq('id', id);
-        
+
       if (error) {
         throw new Error(error.message);
       }
@@ -100,15 +111,15 @@ const addTodo = async ({ title, completed, priority }) => {
       console.error('Failed to delete todo:', err);
       setError(err.message);
     }
-  };
+  }, [id, router]);
 
-  return { 
-    todo, 
-    isPending, 
-    error, 
+  return {
+    todo,
+    isPending,
+    error,
     updateTodo: id ? updateTodo : () => {},
-    deleteTodo: id ? deleteTodo : () => {}, 
-    addTodo 
+    deleteTodo: id ? deleteTodo : () => {},
+    addTodo
   };
 };
 

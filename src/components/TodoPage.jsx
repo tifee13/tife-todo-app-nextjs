@@ -6,9 +6,9 @@ import SearchFilter from './SearchFilter';
 import Pagination from './Pagination';
 import useCachedTodos from '../hooks/useCachedTodos';
 
-const TodoPage = ({ topic = "Todos", sourceKey, url }) => {
+const TodoPage = ({ topic = "Todos", sourceKey }) => {
   const [refresh, setRefresh] = useState(0);
-  const { data: todos, isPending, error } = useCachedTodos(sourceKey, url, refresh);
+  const { data: todos, isPending, error } = useCachedTodos(sourceKey, refresh);
 
   const [currentPage, setCurrentPage] = useState(1);
   const todosPerPage = 10;
@@ -20,8 +20,8 @@ const TodoPage = ({ topic = "Todos", sourceKey, url }) => {
     const matchesSearch = todo.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === 'all'
       ? true
-      : String(todo.completed).toLowerCase() === filterStatus.toLowerCase();
-    
+      : (filterStatus === 'true' ? todo.completed === true : todo.completed === false);
+
     const matchesPriority = sourceKey === 'priority_todos' ? todo.priority === true : true;
 
     return matchesSearch && matchesStatus && matchesPriority;

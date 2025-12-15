@@ -7,7 +7,7 @@ const TodoList = ({ todos, topic }) => {
   const cardBg = useColorModeValue("pink.50", "purple.700");
   const hoverBg = useColorModeValue("pink.100", "purple.600");
   const textColor = useColorModeValue("purple.800", "pink.100");
-  const getStatus = (todo) => (String(todo.completed).toLowerCase() === 'true'  ? "Completed ✅" : "Incomplete ❌");
+  const getStatus = (todo) => (todo.completed === true ? "Completed ✅" : "Incomplete ❌");
 
   return (
     <Box py={6} px={4}>

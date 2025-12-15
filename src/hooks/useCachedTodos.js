@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
-const useCachedTodos = (sourceKey, url, refetchTrigger) => { 
+const useCachedTodos = (sourceKey, refetchTrigger) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
@@ -31,7 +31,7 @@ const useCachedTodos = (sourceKey, url, refetchTrigger) => {
     };
 
     fetchTodos();
-  }, [sourceKey, url, refetchTrigger]);
+  }, [sourceKey, refetchTrigger]);
 
   return { data, isPending, error };
 };
