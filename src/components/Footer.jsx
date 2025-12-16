@@ -12,7 +12,7 @@ const Footer = () => {
     <Box as="footer" bg={bg} color={textColor} py={6} px={4} mt={10}>
       <Flex direction={{ base: "column", md: "row" }} align="center" justify="space-between" maxW="6xl" mx="auto" textAlign={{ base: "center", md: "left" }}>
         <Text fontWeight="bold" mb={{ base: 4, md: 0 }}>
-          🩷Tife's Todo App🩷
+          Tiffs Todo
         </Text>
         <Flex gap={4} align="center">
           <Link href="https://github.com/tifee13" isExternal aria-label="GitHub">

@@ -30,7 +30,7 @@ const Navbar = () => {
     <Box bg={bg} px={4} py={3} fontFamily="heading" w="100%">
       <Flex justify="space-between" align="center">
         <Heading size="md" color={textColor}>
-          🩷Tife's Todo App🩷
+          Tiffs Todo
         </Heading>
 
         <HStack

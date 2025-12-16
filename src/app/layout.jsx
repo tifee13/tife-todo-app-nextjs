@@ -5,7 +5,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata = {
-  title: "Tife's Todo App",
+  title: "Tife's Todo",
   description: "A modern, accessible, and responsive Todo application built with React and Chakra UI.",
 };
 

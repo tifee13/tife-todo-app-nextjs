@@ -1,4 +1,4 @@
-# 🩷Tife's Todo App🩷
+# Tiffs Todo
 
 A modern, accessible, and responsive Todo application built with React and Chakra UI. 
 This app now uses a remote Supabase database for data storage.
